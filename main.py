@@ -6,7 +6,6 @@ import sys
 import Queue
 import json
 from threading import Thread, Lock
-from bs4 import BeautifulSoup as soup
 from random import randint, choice
 
 
@@ -19,7 +18,7 @@ def readconfig(filename):
 def verifydata(config):
     for data in config:
         if config[data] == "":
-            log("{} is not filled out in config.json! Exiting...".format(data))
+            print("{} is not filled out in config.json! Exiting...".format(data))
             sys.exit()
 
 
@@ -74,7 +73,7 @@ def request_recaptcha(service_key, google_site_key, pageurl):
     url = "http://2captcha.com/in.php?key=" + service_key + "&method=userrecaptcha&googlekey=" + google_site_key + "&pageurl=" + pageurl
     resp = requests.get(url)
     if resp.text[0:2] != 'OK':
-        log("Error: {} Exiting...".format(resp.text))
+        print("Error: {} Exiting...".format(resp.text))
         raise
     captcha_id = resp.text[3:]
     print("Successfully requested for captcha.")
@@ -118,7 +117,7 @@ def enter_raffle():
                     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36"
                 })
                 a = s.get(raffle_url)
-                print("Requesting raffle link...")
+                print("Requesting raffle: " + str(raffle_url))
                 a.raise_for_status()
                 x = request_recaptcha(captcha_api, site_key, raffle_url)
                 grt = receive_token(x, captcha_api)
@@ -187,7 +186,6 @@ if __name__ == "__main__":
     full_name = config["fullname"]
     raw_email = config["email"]
     raffle_url = config["url"]
-    locale_ = config["locale"]
     num_enter = config["how-many-times-do-you-want-to-enter-the-raffle"]
     captcha_api = config["2captcha-api"]
     site_key = config["raffle-sitekey"]
