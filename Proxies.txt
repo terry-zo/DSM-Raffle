@@ -1,2 +1,0 @@
-ip:host
-ip:host:user:pass
