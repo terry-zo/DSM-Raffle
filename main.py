@@ -1,7 +1,6 @@
 import requests
 import names
 import time
-import names
 import os
 import sys
 import Queue
